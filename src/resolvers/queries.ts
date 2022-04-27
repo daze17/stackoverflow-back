@@ -46,15 +46,23 @@ export const getUsers = async (): Promise<user[]> => {
 };
 
 export const getQuestions = async (): Promise<question[]> => {
-  const questiondata = await db.Question.findAll();
+  const questiondata = await db.Question.findAll({
+    include: {
+      model: db.User,
+      through: {
+        attributes: [],
+      },
+    },
+    raw: true, 
+    nest: true
+  });
   const questions = await questiondata.map((question: question) => {
     return {
-      id: question.id,
-      title: question.title,
+      ...question,
       status: Boolean(Number(question.status)),
     };
   });
-  console.log(questions);
+  console.log(questiondata);
   return questions;
 };
 export const getUserDetail = async (context: any) => {
@@ -84,6 +92,32 @@ export const getUserDetail = async (context: any) => {
       : "";
     console.log(userdetail);
     return userdetail;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getQuestionDetail = async (data: any) => {
+  try {
+    const questionDatas = await db.Question.findAll({
+      where: { id: data.questionId },
+      include: {
+        model: db.User,
+        as: db.User.tableName,
+        through: {
+          attributes: [],
+        },
+      },
+      raw: true,
+      nest: true,
+    });
+    const _questionRaw = questionDatas.length
+      ? questionDatas.reduce((obj: any, item: any) => item)
+      : "";
+    const questionRaw = {
+      ..._questionRaw,
+      status: Boolean(Number(_questionRaw.status)),
+    };
+    return questionRaw;
   } catch (error) {
     console.log(error);
   }

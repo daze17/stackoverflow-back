@@ -1,6 +1,8 @@
 const { gql } = require("apollo-server");
 
 export const typeDefs = gql`
+  scalar Date
+
   type User {
     id: String
     name: String
@@ -12,8 +14,18 @@ export const typeDefs = gql`
   type Question {
     id: Int
     title: String
+    tags: String
     status: Boolean
-    user: [User]
+    createdAt: Date
+    updatedAt: Date
+    questionBody: String
+    Users: User
+  }
+  type Login {
+    accessToken: String
+  }
+  type askQuestion {
+    questionId: Int
   }
 
   input UserInput {
@@ -25,24 +37,22 @@ export const typeDefs = gql`
     email: String!
     password: String!
   }
-  input QuestionInput{
+  input QuestionInput {
     userId: String
     title: String!
     questionBody: String!
     tags: String
     status: Boolean
   }
-  type Login {
-    accessToken: String
-  }
-  type askQuestion {
-    questionId: String
+  input questionDetailInput {
+    questionId: Int
   }
 
   type Query {
+    me: User
     users: [User]
     questions: [Question]
-    me: User
+    questionDetail(input: questionDetailInput): Question
   }
   type Mutation {
     addUser(input: UserInput): Boolean

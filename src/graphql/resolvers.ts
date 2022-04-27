@@ -1,4 +1,9 @@
-import { getQuestions, getUserDetail, getUsers } from "../resolvers/queries";
+import {
+  getQuestions,
+  getUserDetail,
+  getUsers,
+  getQuestionDetail,
+} from "../resolvers/queries";
 import {
   addUserMutation,
   loginMutation,
@@ -7,9 +12,11 @@ import {
 
 export const resolvers = {
   Query: {
+    me: async (_: any, {}, context: any) => getUserDetail(context),
     users: async () => getUsers(),
     questions: async () => getQuestions(),
-    me: async (_: any, {}, context: any) => getUserDetail(context),
+    questionDetail: async (_: any, { input }: any) => getQuestionDetail(input),
+    // getQuestions: async ( )
   },
   Mutation: {
     addUser: async (_: any, { input }: any) => addUserMutation(input),

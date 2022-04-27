@@ -4,7 +4,8 @@ import { Model } from "sequelize";
 interface QuesttionAttributes {
   id: number;
   title: string;
-  question: string;
+  questionBody: string;
+  tags: string;
   status: boolean;
 }
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -14,8 +15,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
   {
     id!: number;
     title!: string;
-    question!: string;
+    questionBody!: string;
     status!: boolean;
+    tags!: string;
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -41,13 +43,17 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      question: {
+      questionBody: {
         type: DataTypes.STRING,
         allowNull: false,
       },
       status: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      tags: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {

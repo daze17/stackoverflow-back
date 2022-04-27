@@ -16,8 +16,37 @@ export const typeDefs = gql`
     user: [User]
   }
 
+  input UserInput {
+    name: String
+    email: String
+    password: String
+  }
+  input LoginInput {
+    email: String!
+    password: String!
+  }
+  input QuestionInput{
+    userId: String
+    title: String!
+    questionBody: String!
+    tags: String
+    status: Boolean
+  }
+  type Login {
+    accessToken: String
+  }
+  type askQuestion {
+    questionId: String
+  }
+
   type Query {
     users: [User]
     questions: [Question]
+    me: User
+  }
+  type Mutation {
+    addUser(input: UserInput): Boolean
+    login(input: LoginInput): Login
+    addQuestion(input: QuestionInput): askQuestion
   }
 `;

@@ -27,6 +27,13 @@ export const typeDefs = gql`
   type askQuestion {
     questionId: Int
   }
+  type Comments{
+    id: String
+    commentBody: String
+    vote: Int
+    createdAt: Date
+    updatedAt: Date
+  }
 
   input UserInput {
     name: String
@@ -44,7 +51,14 @@ export const typeDefs = gql`
     tags: String
     status: Boolean
   }
-  input questionDetailInput {
+  input QuestionDetailInput {
+    questionId: Int
+  }
+  input AddCommentInput {
+    questionId: Int
+    commentBody: String!
+  }
+  input CommentsInput{
     questionId: Int
   }
 
@@ -52,11 +66,13 @@ export const typeDefs = gql`
     me: User
     users: [User]
     questions: [Question]
-    questionDetail(input: questionDetailInput): Question
+    questionDetail(input: QuestionDetailInput): Question
+    answer(input: CommentsInput): [Comments]
   }
   type Mutation {
     addUser(input: UserInput): Boolean
     login(input: LoginInput): Login
     addQuestion(input: QuestionInput): askQuestion
+    addComment(input: AddCommentInput): Boolean
   }
 `;

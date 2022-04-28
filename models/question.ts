@@ -7,6 +7,7 @@ interface QuesttionAttributes {
   questionBody: string;
   tags: string;
   status: boolean;
+  vote: number;
 }
 module.exports = (sequelize: any, DataTypes: any) => {
   class Question
@@ -18,6 +19,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     questionBody!: string;
     status!: boolean;
     tags!: string;
+    vote!: number;
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -44,7 +46,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       questionBody: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       status: {
@@ -54,6 +56,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       tags: {
         type: DataTypes.STRING,
         allowNull: true,
+      },
+      vote: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
     },
     {

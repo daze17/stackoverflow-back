@@ -80,8 +80,9 @@ export const addQuestionMutation = async (data: any, context: any) => {
       questionBody,
       tags,
       status,
+      vote: 0,
     });
-    console.log(addQuestion.dataValues, "hehe");
+    console.log(addQuestion.dataValues, "data");
     const questionConnection = await db.QuestionConnection.create({
       UserId: user.userId,
       QuestionId: addQuestion.dataValues.id,
@@ -89,6 +90,27 @@ export const addQuestionMutation = async (data: any, context: any) => {
     console.log(questionConnection.dataValues);
     const questionId = addQuestion.dataValues.id;
     return { questionId };
+  } catch (error) {
+    console.log(error);
+    throw new ApolloError("system error");
+  }
+};
+
+export const addCommentMutation = async (data: any, context: any) => {
+  try {
+    const { user } = context;
+    const addComment = await db.Comment.create({
+      commentBody: data.commentBody,
+      vote: 0,
+      QuestionId: data.questionId,
+    });
+    const addCommentConnection = await db.CommentConnection.create({
+      UserId: user.userId,
+      CommentId: addComment.dataValues.id,
+    });
+    console.log(addComment.dataValues, "data");
+    console.log(addCommentConnection.dataValues, "data");
+    return true;
   } catch (error) {
     console.log(error);
     throw new ApolloError("system error");

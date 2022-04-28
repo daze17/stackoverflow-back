@@ -10,6 +10,7 @@ import jwt from "jsonwebtoken";
 import { config } from "../config";
 import db from "../models";
 
+//seeds
 // createUsers();
 // createQuestions();
 // createQuestionConnection();

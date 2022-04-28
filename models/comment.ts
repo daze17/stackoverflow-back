@@ -1,36 +1,30 @@
 "use strict";
 import { Model } from "sequelize";
 
-interface UserAttributes {
+interface CommentAttributes {
   id: string;
-  name: string;
-  email: string;
-  password: string;
+  commentBody: string;
+  vote: number;
+  QuestionId: number;
 }
-
 module.exports = (sequelize: any, DataTypes: any) => {
-  class User extends Model<UserAttributes> implements UserAttributes {
+  class Comment extends Model<CommentAttributes> implements CommentAttributes {
+    id!: string;
+    commentBody!: string;
+    vote!: number;
+    QuestionId!: number;
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    id!: string;
-    name!: string;
-    email!: string;
-    password!: string;
     static associate(models: any) {
       // define association here
-      User.belongsToMany(models.Question, {
-        through: "QuestionConnections",
-      });
-      User.belongsToMany(models.Comment, {
-        through: "CommentConnections",
-        // foreignKey: "UserId",
-      });
+      Comment.belongsTo(models.Question);
+      // Comment.belongsTo(models.User);
     }
   }
-  User.init(
+  Comment.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -39,24 +33,27 @@ module.exports = (sequelize: any, DataTypes: any) => {
         unique: true,
         primaryKey: true,
       },
-      name: {
-        type: DataTypes.STRING,
+      commentBody: {
+        type: DataTypes.TEXT,
         allowNull: false,
       },
-      email: {
-        type: DataTypes.STRING,
+      vote: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true,
       },
-      password: {
-        type: DataTypes.STRING,
+      QuestionId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "Questions",
+          key: "id",
+        },
       },
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "Comment",
     }
   );
-  return User;
+  return Comment;
 };

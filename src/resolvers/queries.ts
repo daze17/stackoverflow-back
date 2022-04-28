@@ -1,7 +1,4 @@
 import db from "../../models";
-import jwt from "jsonwebtoken";
-import { get } from "lodash";
-import { config } from "../../config";
 
 interface question {
   id: number;
@@ -17,12 +14,6 @@ interface user {
   password: string;
   Questions: question[];
 }
-
-const getHttpToken = (context: any) => {
-  const authorization = get(context, "req.headers.authorization");
-  if (authorization) return authorization.replace("Bearer ", "");
-  return null;
-};
 
 export const getUsers = async (): Promise<user[]> => {
   const userdata = await db.User.findAll({
@@ -53,8 +44,8 @@ export const getQuestions = async (): Promise<question[]> => {
         attributes: [],
       },
     },
-    raw: true, 
-    nest: true
+    raw: true,
+    nest: true,
   });
   const questions = await questiondata.map((question: question) => {
     return {
@@ -66,7 +57,6 @@ export const getQuestions = async (): Promise<question[]> => {
   return questions;
 };
 export const getUserDetail = async (context: any) => {
-  // const token = getHttpToken(context);
   try {
     const { user } = context;
     console.log(context.user, "user data");
@@ -120,5 +110,18 @@ export const getQuestionDetail = async (data: any) => {
     return questionRaw;
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getAnswers = async (data: any) => {
+  try {
+    const findAnswers = await db.Comment.findAll({
+      where: { QuestionId: data.questionId },
+      raw: true
+    });
+    console.log(findAnswers, 'findAnswers')
+    return findAnswers
+  } catch (error) {
+    console.log(error)
   }
 };

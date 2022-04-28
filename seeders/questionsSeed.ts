@@ -5,6 +5,7 @@ export const questions = [
     questionBody: "asking questions123",
     tags: "react",
     status: false,
+    vote: 0,
   },
   {
     id: 2,
@@ -12,12 +13,15 @@ export const questions = [
     questionBody: "asking question no 2",
     tags: "mobile",
     status: false,
+    vote: 0,
   },
+
   {
     id: 3,
     title: "question 3",
     questionBody: "asking question no 3",
     tags: "react",
     status: true,
+    vote: 0,
   },
 ];
